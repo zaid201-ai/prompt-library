@@ -5,27 +5,32 @@ from uuid import uuid4
 from PIL import Image
 
 # إعدادات الصفحة
-st.set_page_config(page_title="Prompt Library", layout="wide")
+st.set_page_config(page_title="Prompt Library By Zaid Hatamleh", layout="wide")
 
 # تفعيل حالة تسجيل الدخول في الـ session_state
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
+if "username" not in st.session_state:
+    st.session_state.username = ""
 
-# --- واجهة المستخدم الترحيبية (إذا لمש تسجيل الدخول) ---
+# --- واجهة المستخدم الترحيبية (إذا لم يتم تسجيل الدخول) ---
 if not st.session_state.logged_in:
-    st.markdown("<h1 style='text-align: center; color: #4F8BF9;'>🖼️ مرحباً بك في مكتبة البرومبتات الذكية</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #4F8BF9;'>🖼️ Prompt Library By Zaid Hatamleh </h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: gray;'>تطبيقك الشخصي لحفظ وتنظيم صورك وبرومبتات الذكاء الاصطناعي</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("---")
-        # خيار كلمة مرور بسيطة لحماية مكتبتك (اختياري، يمكنك تغييرها أو جعلها كزر دخول مباشر)
-        password = st.text_input("أدخل اسم المستخدم للدخول ):", type="password")
+        # خانة اسم المستخدم مباشرة وبدون أي أزرار أو قوائم إضافية لإخفائها
+        username_input = st.text_input("أدخل اسم المستخدم للبدء:", value=st.session_state.username)
         
         if st.button("🚀 الدخول إلى المكتبة", use_container_width=True):
-            # يمكنك وضـع كلمة مرور معينة أو تركها تسمح بالدخول مباشرة
-            st.session_state.logged_in = True
-            st.rerun()
+            if username_input.strip() != "":
+                st.session_state.logged_in = True
+                st.session_state.username = username_input
+                st.rerun()
+            else:
+                st.warning("الرجاء إدخال اسم المستخدم أولاً.")
     
     # إيقاف تنفيذ باقي الكود حتى يسجل الدخول
     st.stop()
@@ -50,12 +55,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# زر تسجيل الخروج في الشريط الجانبي
-if st.sidebar.button("🔒 قفل التطبيق (تسجيل خروج)"):
+# زر تسجيل الخروج في الشريط الجانبي مع الترحيب بالمستخدم
+st.sidebar.success(f"مرحباً بك، {st.session_state.username} 👋")
+if st.sidebar.button("🔒 قفل التطبيق (تسجيل خروج)", use_container_width=True):
     st.session_state.logged_in = False
     st.rerun()
 
-st.title("🖼️ مكتبة البرومبتات والصور الذكية")
+st.title("🖼️ Prompt Library By Zaid Hatamleh")
 st.markdown("---")
 
 # مسارات التطبيق المطلقة
